@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery | Savory Bites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="scripts.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B6B',
+                        secondary: '#4ECDC4',
+                        dark: '#292F36',
+                        light: '#F7FFF7',
+                        accent: '#FFE66D'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        .delivery-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+        }
+        
+        .cart-preview {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .cart-preview.open {
+            max-height: 500px;
+        }
+        
+        .delivery-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delivery-time-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #FF6B6B;
+            color: white;
+            border-radius: 9999px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="font-sans bg-light text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-primary">Savory Bites</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">Home</a>
+                        <a href="menu.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">Menu</a>
+                        <a href="about.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">About Us</a>
+                        <a href="contact.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">Contact</a>
+                        <a href="delivery.html" class="px-3 py-2 rounded-md text-sm font-medium bg-accent text-dark">Delivery</a>
+                        <button id="cart-toggle" class="relative px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        </button>
+                        <button id="reservation-toggle" class="px-3 py-2 rounded-md text-sm font-medium bg-accent text-dark hover:bg-opacity-90">
+                            Book Table
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-cart-toggle" class="relative mr-4 text-dark hover:text-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="mobile-cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="menu-toggle" class="text-dark hover:text-primary focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">Home</a>
+                <a href="menu.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">Menu</a>
+                <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">About Us</a>
+                <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">Contact</a>
+                <a href="delivery.html" class="block px-3 py-2 rounded-md text-base font-medium bg-accent text-dark">Delivery</a>
+                <button id="mobile-reservation-toggle" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium bg-accent text-dark hover:bg-opacity-90">
+                    Book Table
+                </button>
+            </div>
+        </div>
+        
+        <!-- Cart Preview -->
+        <div id="cart-preview" class="cart-preview absolute right-0 mt-2 w-72 md:w-96 bg-white rounded-md shadow-xl z-20 overflow-y-auto">
+            <div class="p-4">
+                <h3 class="font-bold text-lg border-b pb-2">Your Order</h3>
+                <div id="cart-items" class="py-2">
+                    <!-- Cart items will be added here dynamically -->
+                    <p id="empty-cart-message" class="text-gray-500 py-4 text-center">Your cart is empty</p>
+                </div>
+                <div class="border-t pt-3">
+                    <div class="flex justify-between font-semibold mb-3">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="checkout.html" class="flex-1 bg-primary hover:bg-opacity-90 text-white text-center py-2 px-4 rounded-md transition">
+                            Checkout
+                        </a>
+                        <button id="clear-cart" class="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md transition">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Table Booking Form -->
+    <div id="table-booking-form" class="fixed inset-0 bg-black bg-opacity-50 z-30 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden">
+            <div class="flex justify-between items-center bg-primary text-white p-4">
+                <h3 class="font-bold text-lg">Book a Table</h3>
+                <button id="close-booking-form" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <form id="booking-form">
+                    <div class="mb-4">
+                        <label for="booking-name" class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="booking-name" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-email" class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="booking-email" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-phone" class="block text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="booking-phone" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="booking-date" class="block text-gray-700 mb-2">Date</label>
+                            <input type="date" id="booking-date" class="w-full px-3 py-2 border rounded-md" required>
+                        </div>
+                        <div>
+                            <label for="booking-time" class="block text-gray-700 mb-2">Time</label>
+                            <input type="time" id="booking-time" class="w-full px-3 py-2 border rounded-md" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-guests" class="block text-gray-700 mb-2">Number of Guests</label>
+                        <select id="booking-guests" class="w-full px-3 py-2 border rounded-md" required>
+                            <option value="1">1 person</option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                            <option value="4">4 people</option>
+                            <option value="5">5 people</option>
+                            <option value="6">6 people</option>
+                            <option value="7">7 people</option>
+                            <option value="8">8+ people</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-notes" class="block text-gray-700 mb-2">Special Requests</label>
+                        <textarea id="booking-notes" rows="3" class="w-full px-3 py-2 border rounded-md"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded-md transition">
+                        Confirm Reservation
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Hero Section -->
+    <section class="delivery-hero flex items-center justify-center text-center text-white pt-16">
+        <div class="px-4 py-16 sm:px-6 lg:px-8">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Delivery Service</h1>
+            <p class="text-xl md:text-2xl mb-8">Enjoy Savory Bites in the comfort of your home</p>
+        </div>
+    </section>
+
+    <!-- Delivery Options -->
+    <section class="py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">How Would You Like Your Order?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Delivery Option 1 -->
+                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
+                    <div class="delivery-time-badge">30-45 min</div>
+                    <div class="p-8 text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-motorcycle text-primary text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Standard Delivery</h3>
+                        <p class="text-gray-600 mb-6">
+                            Our fastest delivery option with real-time tracking and updates on your order status.
+                        </p>
+                        <div class="mb-6">
+                            <span class="text-2xl font-bold text-primary">$3.99</span>
+                            <span class="text-gray-500"> delivery fee</span>
+                        </div>
+                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
+                            Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Delivery Option 2 -->
+                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
+                    <div class="delivery-time-badge">15-30 min</div>
+                    <div class="p-8 text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-bolt text-primary text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Express Delivery</h3>
+                        <p class="text-gray-600 mb-6">
+                            Priority handling for when you need your food fast. Limited availability during peak hours.
+                        </p>
+                        <div class="mb-6">
+                            <span class="text-2xl font-bold text-primary">$6.99</span>
+                            <span class="text-gray-500"> delivery fee</span>
+                        </div>
+                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
+                            Order Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Delivery Option 3 -->
+                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
+                    <div class="delivery-time-badge">Pick Up</div>
+                    <div class="p-8 text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-store text-primary text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Curbside Pickup</h3>
+                        <p class="text-gray-600 mb-6">
+                            Order online and pick up at our location with zero contact. Park and we'll bring it to you.
+                        </p>
+                        <div class="mb-6">
+                            <span class="text-2xl font-bold text-primary">FREE</span>
+                            <span class="text-gray-500"> no fee</span>
+                        </div>
+                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
+                            Order Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Area Map -->
+    <section class="py-12 bg-light">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Delivery Zone</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/2 mb-6 md:mb-0 md:pr-6">
+                        <div id="delivery-map" class="h-64 md:h-full bg-gray-200 rounded-lg flex items-center justify-center">
+                            <div class="text-center p-4">
+                                <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600">Interactive delivery zone map would display here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-xl font-semibold mb-4">Delivery Coverage</h3>
+                        <p class="text-gray-600 mb-4">
+                            We deliver within a 5-mile radius of our restaurant location. Enter your address below to check if you're in our delivery zone.
+                        </p>
+                        
+                        <div class="mb-6">
+                            <label for="delivery-address-check" class="block text-gray-700 mb-2">Enter Your Address</label>
+                            <div class="flex">
+                                <input type="text" id="delivery-address-check" placeholder="123 Main St, Foodville" class="flex-1 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary">
+                                <button class="bg-primary hover:bg-opacity-90 text-white px-4 py-2 rounded-r-md">
+                                    Check
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-semibold text-blue-800 mb-2">Delivery Hours:</h4>
+                            <ul class="text-blue-700 space-y-1">
+                                <li>Monday - Friday: 11:00 AM - 9:30 PM</li>
+                                <li>Saturday: 10:00 AM - 10:00 PM</li>
+                                <li>Sunday: 10:00 AM - 8:30 PM</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Menu -->
+    <section class="py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Delivery Menu</h2>
+            
+            <div class="flex overflow-x-auto pb-4 mb-8 space-x-2">
+                <button class="food-category-btn active whitespace-nowrap px-4 py-2 rounded-full bg-primary text-white" data-category="all">
+                    All Items
+                </button>
+                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="popular">
+                    Most Popular
+                </button>
+                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="meals">
+                    Complete Meals
+                </button>
+                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="family">
+                    Family Packs
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="delivery-menu-container">
+                <!-- Menu Item 1 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Truffle Pasta" class="w-full h-48 object-cover">
+                        <span class="absolute top-2 left-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded">BESTSELLER</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Truffle Pasta</h3>
+                            <span class="text-primary font-bold">$24.99</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Our chef's special creation with black truffle and parmesan.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-gray-500 text-sm ml-1">(48)</span>
+                            </div>
+                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d1" data-name="Truffle Pasta" data-price="24.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Menu Item 2 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Summer Salad" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Summer Salad</h3>
+                            <span class="text-primary font-bold">$16.99</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Fresh seasonal ingredients with house dressing.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="text-gray-500 text-sm ml-1">(32)</span>
+                            </div>
+                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d2" data-name="Summer Salad" data-price="16.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Menu Item 3 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chocolate Soufflé" class="w-full h-48 object-cover">
+                        <span class="absolute top-2 left-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Chocolate Soufflé</h3>
+                            <span class="text-primary font-bold">$12.99</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Warm chocolate soufflé with vanilla ice cream.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-gray-500 text-sm ml-1">(27)</span>
+                            </div>
+                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d3" data-name="Chocolate Soufflé" data-price="12.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="menu.html" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full transition">
+                    View Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Form -->
+    <section id="delivery-form" class="py-12 bg-light">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white p-8 md:p-12 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-bold text-center mb-8">Place Your Delivery Order</h2>
+                
+                <form id="delivery-order-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="delivery-first-name" class="block text-gray-700 mb-2">First Name</label>
+                            <input type="text" id="delivery-first-name" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div>
+                            <label for="delivery-last-name" class="block text-gray-700 mb-2">Last Name</label>
+                            <input type="text" id="delivery-last-name" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="delivery-phone" class="block text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="delivery-phone" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    </div>
+                    
+                    <div>
+                        <label for="delivery-email" class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="delivery-email" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    </div>
+                    
+                    <div>
+                        <label for="delivery-address" class="block text-gray-700 mb-2">Delivery Address</label>
+                        <input type="text" id="delivery-address" placeholder="Street address" class="w-full px-4 py-3 border rounded-t-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="delivery-city" placeholder="City" class="w-full px-4 py-3 border border-t-0 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                            <input type="text" id="delivery-state" placeholder="State" class="w-full px-4 py-3 border border-t-0 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                            <input type="text" id="delivery-zip" placeholder="ZIP Code" class="w-full px-4 py-3 border border-t-0 rounded-b-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="delivery-date" class="block text-gray-700 mb-2">Delivery Date</label>
+                            <input type="date" id="delivery-date" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div>
+                            <label for="delivery-time" class="block text-gray-700 mb-2">Delivery Time</label>
+                            <input type="time" id="delivery-time" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="delivery-instructions" class="block text-gray-700 mb-2">Special Instructions</label>
+                        <textarea id="delivery-instructions" rows="3" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Building code, gate instructions, etc."></textarea>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-md transition duration-300">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Delivery FAQs</h2>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
+                        <span class="text-lg font-medium">What are your delivery hours?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600">
+                            We deliver daily from 11:00 AM to 9:30 PM Monday-Friday, 10:00 AM to 10:00 PM on Saturdays, and 10:00 AM to 8:30 PM on Sundays. Last orders for delivery must be placed at least 45 minutes before closing time.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
+                        <span class="text-lg font-medium">Is there a minimum order amount for delivery?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600">
+                            Yes, we have a $15 minimum order requirement for all delivery orders before taxes and fees. This helps ensure our delivery service remains efficient and sustainable.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
+                        <span class="text-lg font-medium">How can I track my delivery order?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600">
+                            Once your order is on its way, you'll receive a text message with a link to track your delivery in real-time. You can also call us at (555) 123-4567 for updates on your order status.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
+                        <span class="text-lg font-medium">Do you offer contactless delivery?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600">
+                            Yes, all our deliveries are contactless by default. Your driver will place your order at your door, step back, and notify you of its arrival. You can specify additional instructions in the "Special Instructions" field when placing your order.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Savory Bites</h3>
+                    <p class="text-gray-400">A modern dining experience with authentic flavors and exceptional service.</p>
+                    <div class="mt-4">
+                        <div class="flex space-x-2">
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-tripadvisor"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="menu.html" class="text-gray-400 hover:text-white transition">Menu</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                        <li><a href="delivery.html" class="text-gray-400 hover:text-white transition">Delivery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            123 Gourmet Street, Foodville
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            (555) 123-4567
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            info@savorybites.com
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Opening Hours</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Monday - Friday: 11am - 10pm</li>
+                        <li>Saturday: 10am - 11pm</li>
+                        <li>Sunday: 10am - 9pm</li>
+                    </ul>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2">Newsletter</h4>
+                        <form class="flex">
+                            <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l-md text-dark w-full">
+                            <button type="submit" class="bg-primary hover:bg-opacity-90 text-white px-3 py-2 rounded-r-md">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Savory Bites. All rights reserved.</p>
+                <div class="mt-2 text-sm">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a> | 
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+            document.getElementById('mobile-cart-count').textContent = totalItems;
+        }
+        
+        function updateCartPreview() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartItemsContainer.innerHTML = '';
+                cartSubtotal.textContent = '$0.00';
+                return;
+            }
+            
+            emptyCartMessage.classList.add('hidden');
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                itemsHTML += `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <div>
+                            <h4 class="font-medium">${item.name}</h4>
+                            <div class="flex items-center mt-1">
+                                <button class="decrease-quantity text-xs bg-gray-200 hover:bg-gray-300 rounded-full h-5 w-5 flex items-center justify-center" data-id="${item.id}">-</button>
+                                <span class="mx-2 text-sm">${item.quantity}</span>
+                                <button class="increase-quantity text-xs bg-gray-200 hover:bg-gray-300 rounded-full h-5 w-5 flex items-center justify-center" data-id="${item.id}">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-medium">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="remove-item block text-xs text-red-500 hover:text-red-700 mt-1" data-id="${item.id}">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = itemsHTML;
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    updateQuantity(id, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    updateQuantity(id, 1);
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    removeFromCart(id);
+                });
+            });
+        }
+        
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price: parseFloat(price),
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+            
+            // Show a quick notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-md shadow-lg animate-bounce';
+            notification.textContent = `${name} added to cart!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+        
+        function updateQuantity(id, change) {
+            const item = cart.find(item => item.id === id);
+            
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== id);
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartPreview();
+            }
+        }
+        
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+        }
+        
+        // Cart toggle
+        const cartToggle = document.getElementById('cart-toggle');
+        const mobileCartToggle = document.getElementById('mobile-cart-toggle');
+        const cartPreview = document.getElementById('cart-preview');
+        
+        function toggleCart() {
+            cartPreview.classList.toggle('open');
+            // Close other open overlays
+            tableBookingForm.classList.add('hidden');
+        }
+        
+        cartToggle.addEventListener('click', toggleCart);
+        mobileCartToggle.addEventListener('click', toggleCart);
+        
+        // Clear cart
+        document.getElementById('clear-cart').addEventListener('click', () => {
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+        });
+        
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                const name = e.target.getAttribute('data-name');
+                const price = e.target.getAttribute('data-price');
+                addToCart(id, name, price);
+            });
+        });
+        
+        // Table booking form
+        const tableBookingForm = document.getElementById('table-booking-form');
+        const reservationToggle = document.getElementById('reservation-toggle');
+        const mobileReservationToggle = document.getElementById('mobile-reservation-toggle');
+        const closeBookingForm = document.getElementById('close-booking-form');
+        
+        function toggleBookingForm() {
+            tableBookingForm.classList.toggle('hidden');
+            // Close cart if open
+            cartPreview.classList.remove('open');
+        }
+        
+        reservationToggle.addEventListener('click', toggleBookingForm);
+        mobileReservationToggle.addEventListener('click', toggleBookingForm);
+        closeBookingForm.addEventListener('click', toggleBookingForm);
+        
+        // Booking form submission
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('booking-name').value;
+            const email = document.getElementById('booking-email').value;
+            const phone = document.getElementById('booking-phone').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const guests = document.getElementById('booking-guests').value;
+            const notes = document.getElementById('booking-notes').value;
+            
+            // Here you would typically send this data to your server
+            console.log('Booking submitted:', { name, email, phone, date, time, guests, notes });
+            
+            // Show success message
+            alert(`Thank you, ${name}! Your table for ${guests} on ${date} at ${time} has been reserved. We'll send a confirmation to ${email}.`);
+            
+            // Reset form and close
+            document.getElementById('booking-form').reset();
+            toggleBookingForm();
+        });
+        
+        // Delivery form submission
+        document.getElementById('delivery-order-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const firstName = document.getElementById('delivery-first-name').value;
+            const lastName = document.getElementById('delivery-last-name').value;
+            const phone = document.getElementById('delivery-phone').value;
+            const email = document.getElementById('delivery-email').value;
+            const address = document.getElementById('delivery-address').value;
+            const city = document.getElementById('delivery-city').value;
+            const state = document.getElementById('delivery-state').value;
+            const zip = document.getElementById('delivery-zip').value;
+            const date = document.getElementById('delivery-date').value;
+            const time = document.getElementById('delivery-time').value;
+            const instructions = document.getElementById('delivery-instructions').value;
+            
+            // Here you would typically send this data to your server
+            console.log('Delivery order submitted:', { 
+                firstName, 
+                lastName, 
+                phone, 
+                email, 
+                address, 
+                city, 
+                state, 
+                zip, 
+                date, 
+                time, 
+                instructions,
+                cart
+            });
+            
+            // Show success message
+            alert(`Thank you for your order, ${firstName}! Your delivery is scheduled for ${date} at ${time}. We'll send confirmation details to ${email}.`);
+            
+            // In a real implementation, you would redirect to payment processing
+            // window.location.href = 'checkout.html';
+        });
+        
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+        
+        // Menu category filtering
+        document.querySelectorAll('.food-category-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const category = e.target.getAttribute('data-category');
+                
+                // Update active button
+                document.querySelectorAll('.food-category-btn').forEach(btn => {
+                    btn.classList.remove('active', 'bg-primary', 'text-white');
+                    btn.classList.add('bg-gray-200');
+                });
+                
+                e.target.classList.add('active', 'bg-primary', 'text-white');
+                e.target.classList.remove('bg-gray-200');
+                
+                // In a real implementation, you would filter menu items here
+                console.log('Filtering by category:', category);
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            updateCartPreview();
+            
+            // Set min date for booking/delivery to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').min = today;
+            document.getElementById('delivery-date').min = today;
+            
+            // Set delivery time to current time + 45 minutes (minimum preparation time)
+            const now = new Date();
+            const minDeliveryTime = new Date(now.getTime() + 45 * 60000);
+            const minTimeString = minDeliveryTime.toTimeString().substring(0, 5);
+            document.getElementById('delivery-time').min = minTimeString;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | Savory Bites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="scripts.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B6B',
+                        secondary: '#4ECDC4',
+                        dark: '#292F36',
+                        light: '#F7FFF7',
+                        accent: '#FFE66D'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        .menu-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+        }
+        
+        .menu-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .cart-preview {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .cart-preview.open {
+            max-height: 500px;
+        }
+        
+        .food-category-btn.active {
+            background-color: #FF6B6B;
+            color: white;
+        }
+        
+        .menu-section {
+            scroll-margin-top: 100px;
+        }
+    </style>
+</head>
+<body class="font-sans bg-light text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-primary">Savory Bites</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">Home</a>
+                        <a href="menu.html" class="px-3 py-2 rounded-md text-sm font-medium bg-primary text-white">Menu</a>
+                        <a href="about.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">About Us</a>
+                        <a href="contact.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">Contact</a>
+                        <a href="delivery.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-dark">Delivery</a>
+                        <button id="cart-toggle" class="relative px-3 py-2 rounded-md text-sm font-medium hover:bg-secondary hover:text-white">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        </button>
+                        <button id="reservation-toggle" class="px-3 py-2 rounded-md text-sm font-medium bg-accent text-dark hover:bg-opacity-90">
+                            Book Table
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-cart-toggle" class="relative mr-4 text-dark hover:text-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="mobile-cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="menu-toggle" class="text-dark hover:text-primary focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">Home</a>
+                <a href="menu.html" class="block px-3 py-2 rounded-md text-base font-medium bg-primary text-white">Menu</a>
+                <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">About Us</a>
+                <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary hover:text-white">Contact</a>
+                <a href="delivery.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-accent hover:text-dark">Delivery</a>
+                <button id="mobile-reservation-toggle" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium bg-accent text-dark hover:bg-opacity-90">
+                    Book Table
+                </button>
+            </div>
+        </div>
+        
+        <!-- Cart Preview -->
+        <div id="cart-preview" class="cart-preview absolute right-0 mt-2 w-72 md:w-96 bg-white rounded-md shadow-xl z-20 overflow-y-auto">
+            <div class="p-4">
+                <h3 class="font-bold text-lg border-b pb-2">Your Order</h3>
+                <div id="cart-items" class="py-2">
+                    <!-- Cart items will be added here dynamically -->
+                    <p id="empty-cart-message" class="text-gray-500 py-4 text-center">Your cart is empty</p>
+                </div>
+                <div class="border-t pt-3">
+                    <div class="flex justify-between font-semibold mb-3">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="checkout.html" class="flex-1 bg-primary hover:bg-opacity-90 text-white text-center py-2 px-4 rounded-md transition">
+                            Checkout
+                        </a>
+                        <button id="clear-cart" class="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md transition">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Table Booking Form -->
+    <div id="table-booking-form" class="fixed inset-0 bg-black bg-opacity-50 z-30 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden">
+            <div class="flex justify-between items-center bg-primary text-white p-4">
+                <h3 class="font-bold text-lg">Book a Table</h3>
+                <button id="close-booking-form" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <form id="booking-form">
+                    <div class="mb-4">
+                        <label for="booking-name" class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="booking-name" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-email" class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="booking-email" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-phone" class="block text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="booking-phone" class="w-full px-3 py-2 border rounded-md" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="booking-date" class="block text-gray-700 mb-2">Date</label>
+                            <input type="date" id="booking-date" class="w-full px-3 py-2 border rounded-md" required>
+                        </div>
+                        <div>
+                            <label for="booking-time" class="block text-gray-700 mb-2">Time</label>
+                            <input type="time" id="booking-time" class="w-full px-3 py-2 border rounded-md" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-guests" class="block text-gray-700 mb-2">Number of Guests</label>
+                        <select id="booking-guests" class="w-full px-3 py-2 border rounded-md" required>
+                            <option value="1">1 person</option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                            <option value="4">4 people</option>
+                            <option value="5">5 people</option>
+                            <option value="6">6 people</option>
+                            <option value="7">7 people</option>
+                            <option value="8">8+ people</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-notes" class="block text-gray-700 mb-2">Special Requests</label>
+                        <textarea id="booking-notes" rows="3" class="w-full px-3 py-2 border rounded-md"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded-md transition">
+                        Confirm Reservation
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Hero Section -->
+    <section class="menu-hero flex items-center justify-center text-center text-white pt-16">
+        <div class="px-4 py-16 sm:px-6 lg:px-8">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Our Menu</h1>
+            <p class="text-xl md:text-2xl mb-8">Discover our culinary creations</p>
+        </div>
+    </section>
+
+    <!-- Menu Navigation -->
+    <div class="bg-white shadow-sm sticky top-16 z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex overflow-x-auto py-4 space-x-4">
+                <a href="#starters" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white transition">
+                    Starters
+                </a>
+                <a href="#mains" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white transition">
+                    Main Courses
+                </a>
+                <a href="#desserts" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white transition">
+                    Desserts
+                </a>
+                <a href="#drinks" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white transition">
+                    Drinks
+                </a>
+                <a href="#specials" class="whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white transition">
+                    Chef's Specials
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Starters Section -->
+    <section id="starters" class="menu-section py-12 bg-light">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center">
+                <span class="bg-primary text-white rounded-full h-10 w-10 flex items-center justify-center mr-4">1</span>
+                Starters & Appetizers
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Starter 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bruschetta" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Bruschetta</h3>
+                                <span class="text-primary font-bold">$9.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Toasted bread topped with tomatoes, garlic, and fresh basil</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="101" data-name="Bruschetta" data-price="9.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Starter 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Calamari" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Calamari</h3>
+                                <span class="text-primary font-bold">$12.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Crispy fried squid served with lemon aioli</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains seafood</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="102" data-name="Calamari" data-price="12.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Starter 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Caprese Salad" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Caprese Salad</h3>
+                                <span class="text-primary font-bold">$10.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Fresh mozzarella, tomatoes, and basil drizzled with balsamic glaze</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="103" data-name="Caprese Salad" data-price="10.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Starter 4 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Stuffed Mushrooms" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Stuffed Mushrooms</h3>
+                                <span class="text-primary font-bold">$11.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Mushroom caps filled with herbed cream cheese and breadcrumbs</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="104" data-name="Stuffed Mushrooms" data-price="11.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Courses Section -->
+    <section id="mains" class="menu-section py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center">
+                <span class="bg-primary text-white rounded-full h-10 w-10 flex items-center justify-center mr-4">2</span>
+                Main Courses
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Main 1 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Filet Mignon" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Filet Mignon</h3>
+                                <span class="text-primary font-bold">$34.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">8oz tender beef filet with truffle mashed potatoes and seasonal vegetables</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Gluten free option</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="201" data-name="Filet Mignon" data-price="34.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main 2 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Grilled Salmon" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Grilled Salmon</h3>
+                                <span class="text-primary font-bold">$26.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Fresh Atlantic salmon with lemon butter sauce, asparagus, and wild rice</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains seafood</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="202" data-name="Grilled Salmon" data-price="26.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main 3 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chicken Parmesan" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Chicken Parmesan</h3>
+                                <span class="text-primary font-bold">$22.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Breaded chicken topped with marinara and mozzarella, served with spaghetti</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains gluten</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="203" data-name="Chicken Parmesan" data-price="22.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main 4 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Mushroom Risotto" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Mushroom Risotto</h3>
+                                <span class="text-primary font-bold">$19.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Creamy arborio rice with wild mushrooms, white wine, and parmesan</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="204" data-name="Mushroom Risotto" data-price="19.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Desserts Section -->
+    <section id="desserts" class="menu-section py-12 bg-light">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center">
+                <span class="bg-primary text-white rounded-full h-10 w-10 flex items-center justify-center mr-4">3</span>
+                Desserts
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Dessert 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisu" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Tiramisu</h3>
+                                <span class="text-primary font-bold">$10.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Classic Italian dessert with coffee-soaked ladyfingers and mascarpone cream</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains caffeine</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="301" data-name="Tiramisu" data-price="10.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dessert 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1564355808539-22fda35bed7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chocolate Lava Cake" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Chocolate Lava Cake</h3>
+                                <span class="text-primary font-bold">$11.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Warm chocolate cake with a molten center, served with vanilla ice cream</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains gluten</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="302" data-name="Chocolate Lava Cake" data-price="11.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dessert 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Crème Brûlée" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Crème Brûlée</h3>
+                                <span class="text-primary font-bold">$9.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Rich custard topped with a layer of caramelized sugar</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Gluten free</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="303" data-name="Crème Brûlée" data-price="9.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dessert 4 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cheesecake" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">New York Cheesecake</h3>
+                                <span class="text-primary font-bold">$10.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Classic cheesecake with graham cracker crust and berry compote</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="304" data-name="New York Cheesecake" data-price="10.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Drinks Section -->
+    <section id="drinks" class="menu-section py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center">
+                <span class="bg-primary text-white rounded-full h-10 w-10 flex items-center justify-center mr-4">4</span>
+                Drinks & Beverages
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Drink 1 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Craft Cocktails" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Craft Cocktails</h3>
+                                <span class="text-primary font-bold">$12.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Ask your server about our seasonal craft cocktails</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Alcoholic</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="401" data-name="Craft Cocktails" data-price="12.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Drink 2 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Wine Selection" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Wine Selection</h3>
+                                <span class="text-primary font-bold">$9.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Glass of our sommelier's selected wines</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Alcoholic</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="402" data-name="Wine Selection" data-price="9.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Drink 3 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Artisan Coffee" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Artisan Coffee</h3>
+                                <span class="text-primary font-bold">$5.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Locally roasted coffee with optional flavor syrups</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains caffeine</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="403" data-name="Artisan Coffee" data-price="5.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Drink 4 -->
+                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1551029506-0807df4e2031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Fresh Juices" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Fresh Juices</h3>
+                                <span class="text-primary font-bold">$6.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Seasonal fresh-pressed juices (orange, apple, carrot, or beet)</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegan</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="404" data-name="Fresh Juices" data-price="6.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chef's Specials Section -->
+    <section id="specials" class="menu-section py-12 bg-primary bg-opacity-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 flex items-center">
+                <span class="bg-primary text-white rounded-full h-10 w-10 flex items-center justify-center mr-4">5</span>
+                Chef's Specials
+            </h2>
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                <div class="md:flex">
+                    <div class="md:w-1/3">
+                        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Chef Maria Rodriguez" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="uppercase tracking-wide text-sm text-primary font-semibold mb-1">Seasonal Special</div>
+                        <h2 class="text-2xl font-bold mb-4">Seafood Paella</h2>
+                        <p class="text-gray-600 mb-6">Our executive chef's signature dish featuring saffron-infused rice with fresh mussels, clams, shrimp, and chorizo, cooked in a traditional paella pan.</p>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="font-bold text-primary text-xl">$28.99</span>
+                            <button class="add-to-cart bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-full transition" data-id="501" data-name="Seafood Paella" data-price="28.99">
+                                Order Now
+                            </button>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Chef's Note:</h4>
+                            <p class="text-yellow-700">"This dish is inspired by my travels through Valencia, using only the freshest seafood and authentic Spanish spices. It's a taste of the Mediterranean you won't forget!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <!-- Special 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Truffle Risotto" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Truffle Risotto</h3>
+                                <span class="text-primary font-bold">$26.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Creamy arborio rice with black truffle shavings and parmesan</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Vegetarian</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="502" data-name="Truffle Risotto" data-price="26.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Special 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 menu-item">
+                    <div class="md:flex">
+                        <div class="md:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lobster Thermidor" class="w-full h-48 md:h-full object-cover transition duration-300">
+                        </div>
+                        <div class="p-6 md:w-2/3">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">Lobster Thermidor</h3>
+                                <span class="text-primary font-bold">$38.99</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Maine lobster in a creamy brandy sauce with gruyère cheese</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">Contains seafood</span>
+                                <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="503" data-name="Lobster Thermidor" data-price="38.99">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dietary Information -->
+    <section class="py-12 bg-dark text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-8 text-center">Dietary Information</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">🌱</div>
+                    <h3 class="font-semibold mb-1">Vegetarian</h3>
+                    <p class="text-gray-400 text-sm">Contains no meat or fish</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">🥜</div>
+                    <h3 class="font-semibold mb-1">Nut Free</h3>
+                    <p class="text-gray-400 text-sm">No nuts or nut products</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">🌾</div>
+                    <h3 class="font-semibold mb-1">Gluten Free</h3>
+                    <p class="text-gray-400 text-sm">No gluten-containing ingredients</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">🥛</div>
+                    <h3 class="font-semibold mb-1">Dairy Free</h3>
+                    <p class="text-gray-400 text-sm">No milk or dairy products</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">
+                <p>Please inform your server of any allergies or dietary restrictions. While we take precautions, we cannot guarantee that any menu item is completely free of allergens.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Savory Bites</h3>
+                    <p class="text-gray-400">A modern dining experience with authentic flavors and exceptional service.</p>
+                    <div class="mt-4">
+                        <div class="flex space-x-2">
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-tripadvisor"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="menu.html" class="text-gray-400 hover:text-white transition">Menu</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                        <li><a href="delivery.html" class="text-gray-400 hover:text-white transition">Delivery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            123 Gourmet Street, Foodville
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            (555) 123-4567
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            info@savorybites.com
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Opening Hours</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Monday - Friday: 11am - 10pm</li>
+                        <li>Saturday: 10am - 11pm</li>
+                        <li>Sunday: 10am - 9pm</li>
+                    </ul>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2">Newsletter</h4>
+                        <form class="flex">
+                            <input type="email" placeholder="Your email" class="px-3 py-2 rounded-l-md text-dark w-full">
+                            <button type="submit" class="bg-primary hover:bg-opacity-90 text-white px-3 py-2 rounded-r-md">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Savory Bites. All rights reserved.</p>
+                <div class="mt-2 text-sm">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a> | 
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+            document.getElementById('mobile-cart-count').textContent = totalItems;
+        }
+        
+        function updateCartPreview() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartItemsContainer.innerHTML = '';
+                cartSubtotal.textContent = '$0.00';
+                return;
+            }
+            
+            emptyCartMessage.classList.add('hidden');
+            
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                itemsHTML += `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <div>
+                            <h4 class="font-medium">${item.name}</h4>
+                            <div class="flex items-center mt-1">
+                                <button class="decrease-quantity text-xs bg-gray-200 hover:bg-gray-300 rounded-full h-5 w-5 flex items-center justify-center" data-id="${item.id}">-</button>
+                                <span class="mx-2 text-sm">${item.quantity}</span>
+                                <button class="increase-quantity text-xs bg-gray-200 hover:bg-gray-300 rounded-full h-5 w-5 flex items-center justify-center" data-id="${item.id}">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-medium">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="remove-item block text-xs text-red-500 hover:text-red-700 mt-1" data-id="${item.id}">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = itemsHTML;
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    updateQuantity(id, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    updateQuantity(id, 1);
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    removeFromCart(id);
+                });
+            });
+        }
+        
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price: parseFloat(price),
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+            
+            // Show a quick notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-md shadow-lg animate-bounce';
+            notification.textContent = `${name} added to cart!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+        
+        function updateQuantity(id, change) {
+            const item = cart.find(item => item.id === id);
+            
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== id);
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartPreview();
+            }
+        }
+        
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+        }
+        
+        // Cart toggle
+        const cartToggle = document.getElementById('cart-toggle');
+        const mobileCartToggle = document.getElementById('mobile-cart-toggle');
+        const cartPreview = document.getElementById('cart-preview');
+        
+        function toggleCart() {
+            cartPreview.classList.toggle('open');
+            // Close other open overlays
+            tableBookingForm.classList.add('hidden');
+        }
+        
+        cartToggle.addEventListener('click', toggleCart);
+        mobileCartToggle.addEventListener('click', toggleCart);
+        
+        // Clear cart
+        document.getElementById('clear-cart').addEventListener('click', () => {
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartPreview();
+        });
+        
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                const name = e.target.getAttribute('data-name');
+                const price = e.target.getAttribute('data-price');
+                addToCart(id, name, price);
+            });
+        });
+        
+        // Table booking form
+        const tableBookingForm = document.getElementById('table-booking-form');
+        const reservationToggle = document.getElementById('reservation-toggle');
+        const mobileReservationToggle = document.getElementById('mobile-reservation-toggle');
+        const closeBookingForm = document.getElementById('close-booking-form');
+        
+        function toggleBookingForm() {
+            tableBookingForm.classList.toggle('hidden');
+            // Close cart if open
+            cartPreview.classList.remove('open');
+        }
+        
+        reservationToggle.addEventListener('click', toggleBookingForm);
+        mobileReservationToggle.addEventListener('click', toggleBookingForm);
+        closeBookingForm.addEventListener('click', toggleBookingForm);
+        
+        // Booking form submission
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('booking-name').value;
+            const email = document.getElementById('booking-email').value;
+            const phone = document.getElementById('booking-phone').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const guests = document.getElementById('booking-guests').value;
+            const notes = document.getElementById('booking-notes').value;
+            
+            // Here you would typically send this data to your server
+            console.log('Booking submitted:', { name, email, phone, date, time, guests, notes });
+            
+            // Show success message
+            alert(`Thank you, ${name}! Your table for ${guests} on ${date} at ${time} has been reserved. We'll send a confirmation to ${email}.`);
+            
+            // Reset form and close
+            document.getElementById('booking-form').reset();
+            toggleBookingForm();
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            updateCartPreview();
+            
+            // Set min date for booking to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').min = today;
+        });
+    </script>
+</body>
+</html> 
