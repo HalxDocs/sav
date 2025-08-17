@@ -35,6 +35,30 @@
             height: 50vh;
         }
         
+        .delivery-step {
+            transition: all 0.3s ease;
+        }
+        
+        .delivery-step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .delivery-step-icon {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .partner-logo {
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
         .cart-preview {
             transition: all 0.3s ease;
             max-height: 0;
@@ -45,21 +69,15 @@
             max-height: 500px;
         }
         
-        .delivery-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .delivery-time-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #FF6B6B;
-            color: white;
-            border-radius: 9999px;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: bold;
+        @media (max-width: 640px) {
+            .delivery-hero {
+                height: 40vh;
+            }
+            
+            .delivery-step-icon {
+                width: 50px;
+                height: 50px;
+            }
         }
     </style>
 </head>
@@ -201,360 +219,277 @@
     <!-- Delivery Hero Section -->
     <section class="delivery-hero flex items-center justify-center text-center text-white pt-16">
         <div class="px-4 py-16 sm:px-6 lg:px-8">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">Delivery Service</h1>
-            <p class="text-xl md:text-2xl mb-8">Enjoy Savory Bites in the comfort of your home</p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Food Delivery</h1>
+            <p class="text-xl md:text-2xl mb-8">Delicious meals delivered to your doorstep</p>
+            <a href="#order-now" class="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full text-lg transition inline-block">
+                Order Now
+            </a>
         </div>
     </section>
 
-    <!-- Delivery Options -->
+    <!-- Delivery Process -->
     <section class="py-12 bg-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12">How Would You Like Your Order?</h2>
-            
+            <h2 class="text-3xl font-bold mb-12 text-center">How It Works</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Delivery Option 1 -->
-                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
-                    <div class="delivery-time-badge">30-45 min</div>
-                    <div class="p-8 text-center">
-                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-motorcycle text-primary text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-4">Standard Delivery</h3>
-                        <p class="text-gray-600 mb-6">
-                            Our fastest delivery option with real-time tracking and updates on your order status.
-                        </p>
-                        <div class="mb-6">
-                            <span class="text-2xl font-bold text-primary">$3.99</span>
-                            <span class="text-gray-500"> delivery fee</span>
-                        </div>
-                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
-                            Order Now
-                        </a>
+                <!-- Step 1 -->
+                <div class="delivery-step bg-light p-6 rounded-lg text-center shadow-md">
+                    <div class="delivery-step-icon bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-utensils text-2xl"></i>
                     </div>
+                    <h3 class="text-xl font-semibold mb-2">1. Choose Your Meal</h3>
+                    <p class="text-gray-600">Browse our delicious menu and select your favorite dishes</p>
                 </div>
                 
-                <!-- Delivery Option 2 -->
-                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
-                    <div class="delivery-time-badge">15-30 min</div>
-                    <div class="p-8 text-center">
-                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-bolt text-primary text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-4">Express Delivery</h3>
-                        <p class="text-gray-600 mb-6">
-                            Priority handling for when you need your food fast. Limited availability during peak hours.
-                        </p>
-                        <div class="mb-6">
-                            <span class="text-2xl font-bold text-primary">$6.99</span>
-                            <span class="text-gray-500"> delivery fee</span>
-                        </div>
-                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
-                            Order Now
-                        </a>
+                <!-- Step 2 -->
+                <div class="delivery-step bg-light p-6 rounded-lg text-center shadow-md">
+                    <div class="delivery-step-icon bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
                     </div>
+                    <h3 class="text-xl font-semibold mb-2">2. Enter Your Address</h3>
+                    <p class="text-gray-600">Tell us where to deliver your food with our easy checkout</p>
                 </div>
                 
-                <!-- Delivery Option 3 -->
-                <div class="delivery-option bg-light rounded-lg overflow-hidden shadow-lg relative transition duration-300">
-                    <div class="delivery-time-badge">Pick Up</div>
-                    <div class="p-8 text-center">
-                        <div class="bg-primary bg-opacity-10 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-store text-primary text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-4">Curbside Pickup</h3>
-                        <p class="text-gray-600 mb-6">
-                            Order online and pick up at our location with zero contact. Park and we'll bring it to you.
-                        </p>
-                        <div class="mb-6">
-                            <span class="text-2xl font-bold text-primary">FREE</span>
-                            <span class="text-gray-500"> no fee</span>
-                        </div>
-                        <a href="#delivery-form" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition">
-                            Order Now
-                        </a>
+                <!-- Step 3 -->
+                <div class="delivery-step bg-light p-6 rounded-lg text-center shadow-md">
+                    <div class="delivery-step-icon bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-motorcycle text-2xl"></i>
                     </div>
+                    <h3 class="text-xl font-semibold mb-2">3. Fast Delivery</h3>
+                    <p class="text-gray-600">Enjoy your meal delivered fresh and hot to your door</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Delivery Area Map -->
+    <!-- Delivery Areas -->
     <section class="py-12 bg-light">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12">Our Delivery Zone</h2>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Delivery Areas</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">We currently deliver to these neighborhoods with plans to expand soon</p>
+            </div>
             
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="flex flex-col md:flex-row">
-                    <div class="md:w-1/2 mb-6 md:mb-0 md:pr-6">
-                        <div id="delivery-map" class="h-64 md:h-full bg-gray-200 rounded-lg flex items-center justify-center">
-                            <div class="text-center p-4">
-                                <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-4"></i>
-                                <p class="text-gray-600">Interactive delivery zone map would display here</p>
-                            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Area 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
                         </div>
+                        <h3 class="text-xl font-semibold">Downtown</h3>
                     </div>
-                    <div class="md:w-1/2">
-                        <h3 class="text-xl font-semibold mb-4">Delivery Coverage</h3>
-                        <p class="text-gray-600 mb-4">
-                            We deliver within a 5-mile radius of our restaurant location. Enter your address below to check if you're in our delivery zone.
-                        </p>
-                        
-                        <div class="mb-6">
-                            <label for="delivery-address-check" class="block text-gray-700 mb-2">Enter Your Address</label>
-                            <div class="flex">
-                                <input type="text" id="delivery-address-check" placeholder="123 Main St, Foodville" class="flex-1 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary">
-                                <button class="bg-primary hover:bg-opacity-90 text-white px-4 py-2 rounded-r-md">
-                                    Check
-                                </button>
-                            </div>
+                    <p class="text-gray-600">Delivery time: 20-30 minutes</p>
+                    <p class="text-gray-600">Minimum order: $15.00</p>
+                    <p class="text-gray-600">Delivery fee: $3.99</p>
+                </div>
+                
+                <!-- Area 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
                         </div>
-                        
-                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                            <h4 class="font-semibold text-blue-800 mb-2">Delivery Hours:</h4>
-                            <ul class="text-blue-700 space-y-1">
-                                <li>Monday - Friday: 11:00 AM - 9:30 PM</li>
-                                <li>Saturday: 10:00 AM - 10:00 PM</li>
-                                <li>Sunday: 10:00 AM - 8:30 PM</li>
-                            </ul>
-                        </div>
+                        <h3 class="text-xl font-semibold">Midtown</h3>
                     </div>
+                    <p class="text-gray-600">Delivery time: 25-35 minutes</p>
+                    <p class="text-gray-600">Minimum order: $15.00</p>
+                    <p class="text-gray-600">Delivery fee: $4.99</p>
+                </div>
+                
+                <!-- Area 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Uptown</h3>
+                    </div>
+                    <p class="text-gray-600">Delivery time: 30-45 minutes</p>
+                    <p class="text-gray-600">Minimum order: $20.00</p>
+                    <p class="text-gray-600">Delivery fee: $5.99</p>
+                </div>
+                
+                <!-- Area 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Eastside</h3>
+                    </div>
+                    <p class="text-gray-600">Delivery time: 35-50 minutes</p>
+                    <p class="text-gray-600">Minimum order: $20.00</p>
+                    <p class="text-gray-600">Delivery fee: $6.99</p>
+                </div>
+                
+                <!-- Area 5 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Westside</h3>
+                    </div>
+                    <p class="text-gray-600">Delivery time: 40-55 minutes</p>
+                    <p class="text-gray-600">Minimum order: $20.00</p>
+                    <p class="text-gray-600">Delivery fee: $6.99</p>
+                </div>
+                
+                <!-- Area 6 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-primary bg-opacity-20 text-primary p-2 rounded-full mr-4">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Coming Soon</h3>
+                    </div>
+                    <p class="text-gray-600">We're expanding to new areas soon</p>
+                    <p class="text-gray-600">Sign up for updates</p>
+                    <button class="mt-2 bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded-full text-sm transition">
+                        Notify Me
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Delivery Menu -->
+    <!-- Delivery Partners -->
     <section class="py-12 bg-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12">Delivery Menu</h2>
-            
-            <div class="flex overflow-x-auto pb-4 mb-8 space-x-2">
-                <button class="food-category-btn active whitespace-nowrap px-4 py-2 rounded-full bg-primary text-white" data-category="all">
-                    All Items
-                </button>
-                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="popular">
-                    Most Popular
-                </button>
-                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="meals">
-                    Complete Meals
-                </button>
-                <button class="food-category-btn whitespace-nowrap px-4 py-2 rounded-full bg-gray-200 hover:bg-primary hover:text-white" data-category="family">
-                    Family Packs
-                </button>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Also Available On</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Order through your favorite delivery platform</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="delivery-menu-container">
-                <!-- Menu Item 1 -->
-                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Truffle Pasta" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 left-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded">BESTSELLER</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-semibold">Truffle Pasta</h3>
-                            <span class="text-primary font-bold">$24.99</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Our chef's special creation with black truffle and parmesan.</p>
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="text-gray-500 text-sm ml-1">(48)</span>
-                            </div>
-                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d1" data-name="Truffle Pasta" data-price="24.99">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Menu Item 2 -->
-                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Summer Salad" class="w-full h-48 object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-semibold">Summer Salad</h3>
-                            <span class="text-primary font-bold">$16.99</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Fresh seasonal ingredients with house dressing.</p>
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span class="text-gray-500 text-sm ml-1">(32)</span>
-                            </div>
-                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d2" data-name="Summer Salad" data-price="16.99">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Menu Item 3 -->
-                <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chocolate Soufflé" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 left-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-semibold">Chocolate Soufflé</h3>
-                            <span class="text-primary font-bold">$12.99</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Warm chocolate soufflé with vanilla ice cream.</p>
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-gray-500 text-sm ml-1">(27)</span>
-                            </div>
-                            <button class="add-to-cart bg-secondary hover:bg-opacity-90 text-white py-1 px-4 rounded-full text-sm transition" data-id="d3" data-name="Chocolate Soufflé" data-price="12.99">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-8">
-                <a href="menu.html" class="inline-block bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full transition">
-                    View Full Menu
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center">
+                <a href="#" class="partner-logo flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/UberEats_Logo.svg/2560px-UberEats_Logo.svg.png" alt="Uber Eats" class="h-12 object-contain">
+                </a>
+                <a href="#" class="partner-logo flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/DoorDash_Logo.svg/2560px-DoorDash_Logo.svg.png" alt="DoorDash" class="h-10 object-contain">
+                </a>
+                <a href="#" class="partner-logo flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Grubhub_logo.svg/2560px-Grubhub_logo.svg.png" alt="Grubhub" class="h-12 object-contain">
+                </a>
+                <a href="#" class="partner-logo flex justify-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Postmates_logo.svg/2560px-Postmates_logo.svg.png" alt="Postmates" class="h-10 object-contain">
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Delivery Form -->
-    <section id="delivery-form" class="py-12 bg-light">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white p-8 md:p-12 rounded-lg shadow-lg">
-                <h2 class="text-3xl font-bold text-center mb-8">Place Your Delivery Order</h2>
-                
-                <form id="delivery-order-form" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="delivery-first-name" class="block text-gray-700 mb-2">First Name</label>
-                            <input type="text" id="delivery-first-name" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                        </div>
-                        <div>
-                            <label for="delivery-last-name" class="block text-gray-700 mb-2">Last Name</label>
-                            <input type="text" id="delivery-last-name" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                        </div>
+    <!-- Order Now Section -->
+    <section id="order-now" class="py-12 bg-primary text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-4">Ready to Order?</h2>
+                    <p class="text-xl mb-6">Browse our menu and place your order for delivery or pickup</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="menu.html" class="bg-white hover:bg-gray-100 text-primary font-bold py-3 px-6 rounded-full transition">
+                            View Full Menu
+                        </a>
+                        <a href="tel:5551234567" class="border-2 border-white hover:bg-white hover:text-primary font-bold py-3 px-6 rounded-full transition">
+                            <i class="fas fa-phone mr-2"></i> Call to Order
+                        </a>
                     </div>
-                    
-                    <div>
-                        <label for="delivery-phone" class="block text-gray-700 mb-2">Phone Number</label>
-                        <input type="tel" id="delivery-phone" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                    </div>
-                    
-                    <div>
-                        <label for="delivery-email" class="block text-gray-700 mb-2">Email</label>
-                        <input type="email" id="delivery-email" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                    </div>
-                    
-                    <div>
-                        <label for="delivery-address" class="block text-gray-700 mb-2">Delivery Address</label>
-                        <input type="text" id="delivery-address" placeholder="Street address" class="w-full px-4 py-3 border rounded-t-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" id="delivery-city" placeholder="City" class="w-full px-4 py-3 border border-t-0 focus:outline-none focus:ring-2 focus:ring-primary" required>
-                            <input type="text" id="delivery-state" placeholder="State" class="w-full px-4 py-3 border border-t-0 focus:outline-none focus:ring-2 focus:ring-primary" required>
-                            <input type="text" id="delivery-zip" placeholder="ZIP Code" class="w-full px-4 py-3 border border-t-0 rounded-b-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="delivery-date" class="block text-gray-700 mb-2">Delivery Date</label>
-                            <input type="date" id="delivery-date" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
-                        </div>
-                        <div>
-                            <label for="delivery-time" class="block text-gray-700 mb-2">Delivery Time</label>
-                            <input type="time" id="delivery-time" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <div class="bg-white text-dark p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold mb-4">Delivery Hours</h3>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between pb-2 border-b border-gray-200">
+                                <span>Monday - Thursday</span>
+                                <span class="font-medium">11:00 AM - 10:00 PM</span>
+                            </li>
+                            <li class="flex justify-between pb-2 border-b border-gray-200">
+                                <span>Friday - Saturday</span>
+                                <span class="font-medium">11:00 AM - 11:00 PM</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Sunday</span>
+                                <span class="font-medium">12:00 PM - 9:00 PM</span>
+                            </li>
+                        </ul>
+                        <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Holiday Hours:</h4>
+                            <p class="text-yellow-700">Delivery may be limited on major holidays. Please call ahead.</p>
                         </div>
                     </div>
-                    
-                    <div>
-                        <label for="delivery-instructions" class="block text-gray-700 mb-2">Special Instructions</label>
-                        <textarea id="delivery-instructions" rows="3" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Building code, gate instructions, etc."></textarea>
-                    </div>
-                    
-                    <div class="pt-4">
-                        <button type="submit" class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-md transition duration-300">
-                            Proceed to Checkout
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-12 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12">Delivery FAQs</h2>
+    <section class="py-12 bg-light">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
             
-            <div class="max-w-3xl mx-auto space-y-4">
-                <!-- FAQ Item 1 -->
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
-                        <span class="text-lg font-medium">What are your delivery hours?</span>
-                        <i class="fas fa-chevron-down transition-transform"></i>
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">What are your delivery hours?</h3>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </div>
                     </button>
-                    <div class="faq-content hidden px-6 pb-6 pt-0">
-                        <p class="text-gray-600">
-                            We deliver daily from 11:00 AM to 9:30 PM Monday-Friday, 10:00 AM to 10:00 PM on Saturdays, and 10:00 AM to 8:30 PM on Sundays. Last orders for delivery must be placed at least 45 minutes before closing time.
-                        </p>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600">We deliver daily from 11:00 AM to 10:00 PM, with extended hours until 11:00 PM on Fridays and Saturdays. Sunday delivery is available from 12:00 PM to 9:00 PM.</p>
                     </div>
                 </div>
                 
-                <!-- FAQ Item 2 -->
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
-                        <span class="text-lg font-medium">Is there a minimum order amount for delivery?</span>
-                        <i class="fas fa-chevron-down transition-transform"></i>
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">Is there a minimum order amount for delivery?</h3>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </div>
                     </button>
-                    <div class="faq-content hidden px-6 pb-6 pt-0">
-                        <p class="text-gray-600">
-                            Yes, we have a $15 minimum order requirement for all delivery orders before taxes and fees. This helps ensure our delivery service remains efficient and sustainable.
-                        </p>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600">Yes, we have a minimum order amount of $15.00 for most areas. Some neighborhoods further from our location may have a $20.00 minimum.</p>
                     </div>
                 </div>
                 
-                <!-- FAQ Item 3 -->
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
-                        <span class="text-lg font-medium">How can I track my delivery order?</span>
-                        <i class="fas fa-chevron-down transition-transform"></i>
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">How can I track my delivery order?</h3>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </div>
                     </button>
-                    <div class="faq-content hidden px-6 pb-6 pt-0">
-                        <p class="text-gray-600">
-                            Once your order is on its way, you'll receive a text message with a link to track your delivery in real-time. You can also call us at (555) 123-4567 for updates on your order status.
-                        </p>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600">After placing your order, you'll receive a confirmation email or text with a link to track your delivery in real-time. You can also call us at (555) 123-4567 for updates.</p>
                     </div>
                 </div>
                 
-                <!-- FAQ Item 4 -->
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition">
-                        <span class="text-lg font-medium">Do you offer contactless delivery?</span>
-                        <i class="fas fa-chevron-down transition-transform"></i>
+                <!-- FAQ 4 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">Can I schedule a delivery for later?</h3>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </div>
                     </button>
-                    <div class="faq-content hidden px-6 pb-6 pt-0">
-                        <p class="text-gray-600">
-                            Yes, all our deliveries are contactless by default. Your driver will place your order at your door, step back, and notify you of its arrival. You can specify additional instructions in the "Special Instructions" field when placing your order.
-                        </p>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600">Yes! When placing your order through our website, you'll have the option to select "Schedule for Later" and choose your preferred delivery time (up to 7 days in advance).</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 5 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <button class="faq-toggle w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">What payment methods do you accept for delivery?</h3>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600">We accept all major credit cards (Visa, Mastercard, American Express, Discover), Apple Pay, Google Pay, and PayPal for online orders. For phone orders, we accept credit cards and cash on delivery.</p>
                     </div>
                 </div>
             </div>
@@ -837,73 +772,15 @@
             toggleBookingForm();
         });
         
-        // Delivery form submission
-        document.getElementById('delivery-order-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Get form values
-            const firstName = document.getElementById('delivery-first-name').value;
-            const lastName = document.getElementById('delivery-last-name').value;
-            const phone = document.getElementById('delivery-phone').value;
-            const email = document.getElementById('delivery-email').value;
-            const address = document.getElementById('delivery-address').value;
-            const city = document.getElementById('delivery-city').value;
-            const state = document.getElementById('delivery-state').value;
-            const zip = document.getElementById('delivery-zip').value;
-            const date = document.getElementById('delivery-date').value;
-            const time = document.getElementById('delivery-time').value;
-            const instructions = document.getElementById('delivery-instructions').value;
-            
-            // Here you would typically send this data to your server
-            console.log('Delivery order submitted:', { 
-                firstName, 
-                lastName, 
-                phone, 
-                email, 
-                address, 
-                city, 
-                state, 
-                zip, 
-                date, 
-                time, 
-                instructions,
-                cart
-            });
-            
-            // Show success message
-            alert(`Thank you for your order, ${firstName}! Your delivery is scheduled for ${date} at ${time}. We'll send confirmation details to ${email}.`);
-            
-            // In a real implementation, you would redirect to payment processing
-            // window.location.href = 'checkout.html';
-        });
-        
-        // FAQ toggle functionality
+        // FAQ Toggle
         document.querySelectorAll('.faq-toggle').forEach(button => {
             button.addEventListener('click', () => {
                 const content = button.nextElementSibling;
                 const icon = button.querySelector('i');
                 
                 content.classList.toggle('hidden');
+                icon.classList.toggle('transform');
                 icon.classList.toggle('rotate-180');
-            });
-        });
-        
-        // Menu category filtering
-        document.querySelectorAll('.food-category-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const category = e.target.getAttribute('data-category');
-                
-                // Update active button
-                document.querySelectorAll('.food-category-btn').forEach(btn => {
-                    btn.classList.remove('active', 'bg-primary', 'text-white');
-                    btn.classList.add('bg-gray-200');
-                });
-                
-                e.target.classList.add('active', 'bg-primary', 'text-white');
-                e.target.classList.remove('bg-gray-200');
-                
-                // In a real implementation, you would filter menu items here
-                console.log('Filtering by category:', category);
             });
         });
         
@@ -912,16 +789,9 @@
             updateCartCount();
             updateCartPreview();
             
-            // Set min date for booking/delivery to today
+            // Set min date for booking to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').min = today;
-            document.getElementById('delivery-date').min = today;
-            
-            // Set delivery time to current time + 45 minutes (minimum preparation time)
-            const now = new Date();
-            const minDeliveryTime = new Date(now.getTime() + 45 * 60000);
-            const minTimeString = minDeliveryTime.toTimeString().substring(0, 5);
-            document.getElementById('delivery-time').min = minTimeString;
         });
     </script>
 </body>
